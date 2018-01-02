@@ -4,7 +4,7 @@ A quick read through the problem statement convinced me to use a well evolved ob
 ## Objects
 
 ### Driver
----
+
 **Constructors**
 
 | Name  | Description |
@@ -26,4 +26,25 @@ A quick read through the problem statement convinced me to use a well evolved ob
 | --- | --- |
 | UpdateAverageSpeed() | Updates the average speed of the driver based on the property Trips |
 | UpdateTotalDistance() | Updates the total distance driven based on the property Trips |
----
+
+### Trip
+
+**Constructors**
+
+| Name  | Description |
+| ------------- | ------------- |
+| Trip(TimeSpan, TimeSpan, distance)  | Initializes a new Trip object with the given StartTime, EndTime and DistanceTravelled |
+
+**Properties**
+
+| Name | Description |
+| --- | --- |
+| StartTime | Gets or Sets the start time of the trip |
+| EndTime | Gets or Sets the end time of the trip |
+| Distance | Gets or Sets the distance travelled during the trip |
+| AvgSpeed | Gets or Sets the average speed for the trip |
+
+**Methods**
+
+None
+
