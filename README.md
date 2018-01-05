@@ -6,6 +6,7 @@ A quick read through the problem statement convinced me to use a well evolved ob
 * For this test purposes, the name is the unique identifier. Meaning there can't be two drivers with the same name.
 * The `Driver` command is issued before a `Trip` for a driver when parsing the input text file sequentially.
 * The data is not persisted to any database. The program uses it's stack and heap memory and is lost when program terminates.
+* The endtime of a trip is always after starttime of the trip.
 
 # Objects
 
@@ -101,4 +102,131 @@ After processing the input text file we would have created Driver(s) and added t
 Alex: 42 miles @ 34 mph
 Dan: 39 miles @ 47 mph
 Bob: 0 miles
+```
+# Tests
+
+The output of the program consists of two steps. 
+* Logs - Logs errors based on the command and input validity.
+* Driver report - Outputs the driver report in the specified format
+
+The test input files are included in the Tests folder of the source code. I included several different tests, some of them that cause exceptions and fires some logs. And others are various success scenarios.
+
+### Test 1 - Invalid file path
+When you run the exe with an input file path that doesn't exist on the user machine. It throws the following error.
+
+#### output
+
+```
+Logs
+------------------
+File not found
+```
+
+### Test 2 - Invalid command
+When you run the exe with this input file contents it recognizes 'autopilot' on line 2 as an invalid command and logs that to the output. Continues with the execution of the rest of the lines and generates the report.
+
+#### Input
+
+```
+Driver Dan
+autopilot
+Trip Dan 12:01 13:16 42.0
+```
+#### Output
+
+```
+Logs
+------------------
+Invalid command found on line 2, Ignoring and continuing
+------------------
+Driver report
+------------------
+Dan: 42 miles @ 34 mph
+------------------
+```
+
+### Test 3 - Invalid argument
+When you run the exe with this input file contents it recognizes 'autopilot' on line 2 as an invalid command and logs that to the output. Continues with the execution of the rest of the lines and generates the report.
+
+#### Input
+
+```
+Driver Dan
+Driver
+Trip Dan 12:01 13:16 42.0
+Driver Alex
+Trip Alex 11:00 11:30 30.0
+Driver
+Trip
+```
+#### Output
+
+```
+Logs
+------------------
+Cannot parse line number 2. Not a valid command
+Cannot parse line number 6. Not a valid command
+Cannot parse line number 7. Not a valid command
+------------------
+Driver report
+------------------
+Dan: 42 miles @ 34 mph
+Alex: 30 miles @ 60 mph
+------------------
+```
+
+### Test 4 - Invalid driver
+When you run the exe with this input file contents it recognizes that driver 'Jag' on line 5 is not a valid driver logs that to the output. Continues with the execution of the rest of the lines and generates the report.
+
+#### Input
+
+```
+Driver Dan
+Trip Dan 12:01 13:16 42.0
+Driver Alex
+Trip Alex 11:00 11:30 30.0
+Trip Jag 12:00 2:00 240.0
+```
+#### Output
+
+```
+Logs
+------------------
+Driver Jag on linenumber 5 not found. Continuing with next command
+------------------
+Driver report
+------------------
+Dan: 42 miles @ 34 mph
+Alex: 30 miles @ 60 mph
+------------------
+```
+
+### Test 5 - Golden path scenario
+When you run the exe with this completely valid input contents, it displays an empty log section and the complete report.
+
+#### Input
+
+```
+Driver Dan
+Trip Dan 12:01 13:16 42.0
+Driver Jag
+Driver Alex
+Trip Alex 11:00 11:30 30.0
+Trip Jag 12:00 13:00 240.0
+Trip Dan 12:00 13:30 100
+Trip Alex 22:00 23:00 35.0
+Trip Jag 1:00 18:00 1000
+```
+#### Output
+
+```
+Logs
+------------------
+------------------
+Driver report
+------------------
+Jag: 1240 miles @ 149 mph
+Dan: 142 miles @ 50 mph
+Alex: 65 miles @ 48 mph
+------------------
 ```
